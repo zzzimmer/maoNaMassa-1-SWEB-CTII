@@ -72,14 +72,14 @@ public class Cliente {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, celular, email, dataCadastro, veiculos);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Cliente cliente = (Cliente) o;
         return Objects.equals(id, cliente.id) && Objects.equals(nome, cliente.nome) && Objects.equals(celular, cliente.celular) && Objects.equals(email, cliente.email) && Objects.equals(dataCadastro, cliente.dataCadastro) && Objects.equals(veiculos, cliente.veiculos);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nome, celular, email, dataCadastro, veiculos);
     }
 }
