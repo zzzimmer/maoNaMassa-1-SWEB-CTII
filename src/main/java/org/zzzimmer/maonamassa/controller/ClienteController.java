@@ -29,7 +29,7 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Cliente> readById(@PathVariable Long id){
-        return ResponseEntity.ok().body(clienteRepository.getReferenceById(id));
+        return ResponseEntity.ok().body(clienteRepository.findById(id).orElseThrow());
     }
 
     @PutMapping("/{id}")
@@ -43,7 +43,7 @@ public class ClienteController {
         }
     }
 
-    @DeleteMapping("/{id})")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete (@PathVariable Long id){
         if (!clienteRepository.existsById(id)){
             return ResponseEntity.notFound().build();
@@ -52,4 +52,5 @@ public class ClienteController {
             return ResponseEntity.noContent().build();
         }
     }
+
 }

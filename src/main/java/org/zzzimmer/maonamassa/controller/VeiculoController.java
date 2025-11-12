@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.zzzimmer.maonamassa.model.Cor;
 import org.zzzimmer.maonamassa.model.Veiculo;
+import org.zzzimmer.maonamassa.repository.CorRepository;
 import org.zzzimmer.maonamassa.repository.VeiculoRepository;
 
 import java.util.List;
@@ -16,9 +18,20 @@ public class VeiculoController {
     @Autowired
     private VeiculoRepository veiculoRepository;
 
+    @Autowired
+    private CorRepository corRepository;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Veiculo> create(@RequestBody Veiculo veiculo){
+        Cor corRecebida = veiculo.getCor();
+        //cor vem só com nome no json
+        if (corRecebida != null && corRecebida.getNome() != null && corRecebida.getId() == null){
+            Cor corSalva = corRepository.findByNome(corRecebida.getNome())
+                    .orElseGet(() -> corRepository.save(corRecebida));
+
+        veiculo.setCor(corSalva);
+        }
         veiculoRepository.save(veiculo);
         return ResponseEntity.ok(veiculo);
     }

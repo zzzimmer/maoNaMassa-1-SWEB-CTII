@@ -31,7 +31,7 @@ public class MarcaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Marca> readById(@PathVariable Long id){
-        return ResponseEntity.ok().body(marcaRespository.getReferenceById(id));
+        return ResponseEntity.ok().body(marcaRespository.findById(id).orElseThrow());
     }
 
     @PutMapping("/{id}")

@@ -17,7 +17,7 @@ public class ModeloController {
     @Autowired
     ModeloRepository modeloRepository;
 
-    @PutMapping
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Modelo> create (@RequestBody Modelo modelo){
         return ResponseEntity.ok().body(modeloRepository.save(modelo));
