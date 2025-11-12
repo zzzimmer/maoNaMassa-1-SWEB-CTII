@@ -1,6 +1,7 @@
 package org.zzzimmer.maonamassa.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -25,7 +26,11 @@ public class Veiculo {
     // Many veiculos has One proprietario. A perspectiva da frase é a do banco de dados
     @ManyToOne
     @JoinColumn(name = "cliente_id")
+    @JsonIgnore
     private Cliente proprietario;
+
+    public Veiculo() {
+    }
 
     public Veiculo(Long id, String placa, String observacoes, Modelo modelo, Cor cor, Cliente proprietario) {
         this.id = id;
@@ -43,7 +48,6 @@ public class Veiculo {
         this.modelo = veiculo.modelo;
         this.cor = veiculo.cor;
         this.proprietario = veiculo.proprietario;
-
     }
 
     public Long getId() {
