@@ -3,6 +3,7 @@ package org.zzzimmer.maonamassa.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,12 +17,12 @@ public class Cliente {
     private String nome;
     private String celular;
     private String email;
-    private LocalDate dataCadastro;
+    private LocalDate dataCadastro = LocalDate.now();
 
     //One proprietario has Many Veiculos. A perspectiva da frase é a do banco de dados
     //Nesse caso, um veiculo não pode ter mais de um proprietario
     @OneToMany(mappedBy = "proprietario", cascade = CascadeType.REMOVE)
-    private List<Veiculo> veiculos;
+    private List<Veiculo> veiculos = new ArrayList<>();
 
     public Long getId() {
         return id;
