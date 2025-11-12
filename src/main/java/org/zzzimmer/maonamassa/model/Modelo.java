@@ -1,6 +1,8 @@
 package org.zzzimmer.maonamassa.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,11 +19,18 @@ public class Modelo {
     // caso fosse diferente NO BANCO, como id_{nomeEntidade}, ai seria necessário usar a notação
     //    @JoinColumn(name = "id_marca")// Ou qualquer outro nome no banco que represente esse atributo
     private Marca marca;
+
     @Enumerated(EnumType.STRING)
     private Ecategoria ecategoria;
-    @ManyToOne
-//    @JoinColumn(name = "motor_id")
+    @OneToOne (mappedBy = "modelo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("modelo")
     private Motor motor;
+
+    public Modelo() {
+        this.motor = new Motor();
+        motor.setModelo(this);
+
+    }
 
     public Long getId() {
         return id;
@@ -57,9 +66,5 @@ public class Modelo {
 
     public Motor getMotor() {
         return motor;
-    }
-
-    public void setMotor(Motor motor) {
-        this.motor = motor;
     }
 }
