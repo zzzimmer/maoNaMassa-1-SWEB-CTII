@@ -2,11 +2,17 @@ package org.zzzimmer.maonamassa.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.*;
 
 
 @Entity
 @Table(name = "motores")
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Motor {
+
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,16 +20,9 @@ public class Motor {
     @Enumerated(EnumType.STRING)
     private ETipoDeCombustivel eTipoCombustivel;
 
-//    @JsonIgnore //garante que o Json não vai serializar o modelo e criar recursão infinita
+    @Getter //aqui, garante que sera implementado apenas o Getter de modelo.
+    // Visto a composição, não é adequado ter um seter de modelo
     @OneToOne
     @JoinColumn
     private Modelo modelo;
-
-    public void setModelo(Modelo modelo) {
-        this.modelo = modelo;
-    }
-
-    public Modelo getModelo() {
-        return modelo;
-    }
 }
