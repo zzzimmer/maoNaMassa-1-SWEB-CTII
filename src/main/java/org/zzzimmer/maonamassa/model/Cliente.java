@@ -25,4 +25,14 @@ public class Cliente {
     @OneToMany(mappedBy = "proprietario", cascade = CascadeType.REMOVE)
     private List<Veiculo> veiculos = new ArrayList<>();
 
+    public void addVeiculo (Veiculo veiculo){
+        this.veiculos.add(veiculo);
+        veiculo.setProprietario(this);
+    }
+
+    public void removeVeiculo(Veiculo veiculo){
+        this.veiculos.remove(veiculo);
+        veiculo.setProprietario(null);
+    }
+
 }
