@@ -1,5 +1,6 @@
 package org.zzzimmer.maonamassa.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class MarcaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Marca> create(@RequestBody Marca marca){
+    public ResponseEntity<Marca> create( @Valid @RequestBody Marca marca){
         marcaRespository.save(marca);
         return ResponseEntity.ok().body(marca);
     }
@@ -35,7 +36,7 @@ public class MarcaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Marca> update(@PathVariable Long id, @RequestBody Marca marca){
+    public ResponseEntity<Marca> update(@PathVariable Long id, @Valid @RequestBody Marca marca){
         if (!marcaRespository.existsById(id)){
             return ResponseEntity.notFound().build();
         } else {

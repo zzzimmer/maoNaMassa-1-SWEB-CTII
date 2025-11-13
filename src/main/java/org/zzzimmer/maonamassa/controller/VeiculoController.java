@@ -1,5 +1,6 @@
 package org.zzzimmer.maonamassa.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class VeiculoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Veiculo> create(@RequestBody Veiculo veiculo){
+    public ResponseEntity<Veiculo> create(@Valid @RequestBody Veiculo veiculo){
         Cor corRecebida = veiculo.getCor();
         //cor vem só com nome no json
         if (corRecebida != null && corRecebida.getNome() != null && corRecebida.getId() == null){
@@ -47,7 +48,7 @@ public class VeiculoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Veiculo> update(@PathVariable Long id, @RequestBody Veiculo veiculo){
+    public ResponseEntity<Veiculo> update(@PathVariable Long id, @Valid @RequestBody Veiculo veiculo){
         if (veiculoRepository.existsById(id)){
             veiculo.setId(id);
             return ResponseEntity.ok(veiculoRepository.save(veiculo));

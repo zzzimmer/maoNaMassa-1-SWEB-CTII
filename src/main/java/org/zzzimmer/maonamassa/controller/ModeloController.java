@@ -1,5 +1,6 @@
 package org.zzzimmer.maonamassa.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class ModeloController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Modelo> create (@RequestBody Modelo modelo){
+    public ResponseEntity<Modelo> create (@Valid @RequestBody Modelo modelo){
         return ResponseEntity.ok().body(modeloRepository.save(modelo));
         //a implementação de save() retorna a entidade, só conferir.
     }
@@ -44,7 +45,7 @@ public class ModeloController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Modelo> update(@PathVariable Long id, @RequestBody Modelo modelo){
+    public ResponseEntity<Modelo> update(@PathVariable Long id, @Valid @RequestBody Modelo modelo){
         if (!modeloRepository.existsById(id)){
             return ResponseEntity.notFound().build();
         } else {
