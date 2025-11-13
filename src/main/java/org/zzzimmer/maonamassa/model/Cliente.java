@@ -2,6 +2,8 @@ package org.zzzimmer.maonamassa.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -20,13 +22,20 @@ public class Cliente {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Informe um nome para o cliente")
+    @Size(max=80, message = "O nome não pode exceder 80 caracteres")
     private String nome;
+
+    @NotBlank(message = "Obrigatório informar telefone")
+    @Size(max = 20, message = "Até 20 caracteres")
     private String celular;
+
+    @NotBlank(message = "Informe o e-mail")
+    @Size(max = 50, message = "Email com até 50 caracteres")
     private String email;
+
     private LocalDate dataCadastro = LocalDate.now();
 
-    //One proprietario has Many Veiculos. A perspectiva da frase é a do banco de dados
-    //Nesse caso, um veiculo não pode ter mais de um proprietario
     @OneToMany(mappedBy = "proprietario", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Veiculo> veiculos = new ArrayList<>();
