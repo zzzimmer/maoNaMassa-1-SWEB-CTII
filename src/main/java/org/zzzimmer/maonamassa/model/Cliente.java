@@ -1,17 +1,22 @@
 package org.zzzimmer.maonamassa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 @Entity
 @Table(name = "clientes")
-
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+//@EqualsAndHashCode(of = "id")
+@ToString
 public class Cliente {
 
+    @EqualsAndHashCode.Include
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -23,6 +28,7 @@ public class Cliente {
     //One proprietario has Many Veiculos. A perspectiva da frase é a do banco de dados
     //Nesse caso, um veiculo não pode ter mais de um proprietario
     @OneToMany(mappedBy = "proprietario", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<Veiculo> veiculos = new ArrayList<>();
 
     public void addVeiculo (Veiculo veiculo){
