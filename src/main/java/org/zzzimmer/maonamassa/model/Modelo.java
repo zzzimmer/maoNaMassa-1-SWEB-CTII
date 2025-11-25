@@ -37,6 +37,7 @@ public class Modelo {
     @OneToOne (mappedBy = "modelo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("modelo")
     @Getter //somente um getter, afinal já é setado via composição
+    @Setter(AccessLevel.NONE) //bloqueia a criação de um setter para esse atributo
     private Motor motor;
 
     public Modelo() {//atentar para diferença de construtor sem argumentos para construtor vazio

@@ -68,9 +68,4 @@ public class VeiculoController {
         }
     }
 
-//    Com isso, finaliza-se um CRUD completo considerando as requisições aos endpoints da API e as
-//    chamadas apropriadas aos métodos oferecidos pelo SDJPA via repository para
-//    executar as transações com o banco de dados.
-
-
 }

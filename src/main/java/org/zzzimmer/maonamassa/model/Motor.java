@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -20,9 +21,9 @@ public class Motor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Informe a potência do motor")
-    @Size(max = 6)
-    private int potencia;
+    @NotNull(message = "Informe a potência do motor")
+    @Positive
+    private Integer potencia;
 
     @NotNull(message = "Informe o tipo de combustivel do motor")
     @Enumerated(EnumType.STRING)
