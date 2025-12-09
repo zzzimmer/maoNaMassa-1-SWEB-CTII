@@ -5,8 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.zzzimmer.maonamassa.dto.ClienteDTO;
+import org.zzzimmer.maonamassa.dto.ResponseClienteDTO;
 import org.zzzimmer.maonamassa.model.Cliente;
 import org.zzzimmer.maonamassa.repository.ClienteRepository;
+import org.zzzimmer.maonamassa.service.ClienteService;
 
 import java.util.List;
 
@@ -15,41 +18,40 @@ import java.util.List;
 public class ClienteController {
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClienteService clienteService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Cliente> create(@Valid @RequestBody Cliente cliente){
-        return ResponseEntity.ok().body(clienteRepository.save(cliente));
+    public ResponseEntity<ResponseClienteDTO> create(@Valid @RequestBody ClienteDTO clienteDTO){
+        return ResponseEntity.ok().body(clienteService.save(clienteDTO));
     }
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> read(){
-        return ResponseEntity.ok().body(clienteRepository.findAll());
+    public ResponseEntity<List<ResponseClienteDTO>> read(){
+        return ResponseEntity.ok().body(clienteService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> readById(@PathVariable Long id){
-        return ResponseEntity.ok().body(clienteRepository.findById(id).orElseThrow());
+    public ResponseEntity<ResponseClienteDTO> readById(@PathVariable Long id){
+        return ResponseEntity.ok().body(clienteService.findById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> update(@PathVariable Long id, @Valid @RequestBody Cliente cliente){
-        if (!clienteRepository.existsById(id)){
+    public ResponseEntity<ResponseClienteDTO> update(@PathVariable Long id, @Valid @RequestBody ClienteDTO clienteDTO){
+        if (!clienteService.existsById(id)){
             return ResponseEntity.notFound().build();
         } else {
-            cliente.setId(id);
-            Cliente clienteAtualizado = clienteRepository.save(cliente);
-            return ResponseEntity.ok().body(clienteAtualizado);
+            clienteService.update(id,clienteDTO);
+            return ResponseEntity.ok().body(clienteService.update(id,clienteDTO));
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete (@PathVariable Long id){
-        if (!clienteRepository.existsById(id)){
+        if (!clienteService.existsById(id)){
             return ResponseEntity.notFound().build();
         } else {
-            clienteRepository.deleteById(id);
+            clienteService.deleteById(id);
             return ResponseEntity.noContent().build();
         }
     }

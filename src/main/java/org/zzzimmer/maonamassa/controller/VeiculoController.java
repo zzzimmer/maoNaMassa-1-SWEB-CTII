@@ -1,14 +1,20 @@
 package org.zzzimmer.maonamassa.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.zzzimmer.maonamassa.dto.ResponseVeiculoDTO;
+import org.zzzimmer.maonamassa.dto.VeiculoDTO;
 import org.zzzimmer.maonamassa.model.Cor;
+import org.zzzimmer.maonamassa.model.Modelo;
 import org.zzzimmer.maonamassa.model.Veiculo;
 import org.zzzimmer.maonamassa.repository.CorRepository;
+import org.zzzimmer.maonamassa.repository.ModeloRepository;
 import org.zzzimmer.maonamassa.repository.VeiculoRepository;
+import org.zzzimmer.maonamassa.service.VeiculoService;
 
 import java.util.List;
 
@@ -17,24 +23,18 @@ import java.util.List;
 public class VeiculoController {
 
     @Autowired
-    private VeiculoRepository veiculoRepository;
+    private VeiculoService veiculoService;
 
     @Autowired
-    private CorRepository corRepository;
+    private VeiculoRepository veiculoRepository;
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Veiculo> create(@Valid @RequestBody Veiculo veiculo){
-        Cor corRecebida = veiculo.getCor();
-        //cor vem só com nome no json
-        if (corRecebida != null && corRecebida.getNome() != null && corRecebida.getId() == null){
-            Cor corSalva = corRepository.findByNome(corRecebida.getNome())
-                    .orElseGet(() -> corRepository.save(corRecebida));
+    public ResponseEntity<ResponseVeiculoDTO> create(@Valid @RequestBody VeiculoDTO veiculoDTO){
+        ResponseVeiculoDTO responseVeiculoDTO = veiculoService.save(veiculoDTO);
+        return ResponseEntity.ok(responseVeiculoDTO);
 
-        veiculo.setCor(corSalva);
-        }
-        veiculoRepository.save(veiculo);
-        return ResponseEntity.ok(veiculo);
     }
 
     @GetMapping

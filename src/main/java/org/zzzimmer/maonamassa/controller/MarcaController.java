@@ -5,9 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.zzzimmer.maonamassa.dto.MarcaDTO;
 import org.zzzimmer.maonamassa.model.Marca;
 import org.zzzimmer.maonamassa.model.Veiculo;
 import org.zzzimmer.maonamassa.repository.MarcaRespository;
+import org.zzzimmer.maonamassa.service.MarcaService;
 
 import java.util.List;
 
@@ -18,43 +20,34 @@ public class MarcaController {
     @Autowired
     MarcaRespository marcaRespository;
 
+    @Autowired
+    private MarcaService marcaService;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Marca> create( @Valid @RequestBody Marca marca){
-        marcaRespository.save(marca);
-        return ResponseEntity.ok().body(marca);
+    public ResponseEntity<MarcaDTO> create(@Valid @RequestBody MarcaDTO marcaDTO){
+        marcaService.save(marcaDTO);
+        return ResponseEntity.ok().body(marcaDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<Marca>> read(){
-        return ResponseEntity.ok().body(marcaRespository.findAll());
+    public ResponseEntity<List<MarcaDTO>> read(){
+        return ResponseEntity.ok().body(marcaService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Marca> readById(@PathVariable Long id){
-        return ResponseEntity.ok().body(marcaRespository.findById(id).orElseThrow());
+    public ResponseEntity<MarcaDTO> readById(@PathVariable Long id){
+        return ResponseEntity.ok().body(marcaService.findById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Marca> update(@PathVariable Long id, @Valid @RequestBody Marca marca){
-        if (!marcaRespository.existsById(id)){
-            return ResponseEntity.notFound().build();
-        } else {
-            marca.setId(id);
-            Marca marcaAtualizada = marcaRespository.save(marca);
-            return ResponseEntity.ok().body(marcaAtualizada);
-        }
+    public ResponseEntity<MarcaDTO> update(@PathVariable Long id, @Valid @RequestBody MarcaDTO marcaDTO){
+        return ResponseEntity.ok(marcaService.update(id, marcaDTO));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete (@PathVariable Long id){
-        if (!marcaRespository.existsById(id)){
-            return ResponseEntity.notFound().build();
-        }else {
-            marcaRespository.deleteById(id);
-            return ResponseEntity.noContent().build();
-            //retorna 204
-        }
+        return ResponseEntity.ok(marcaService.delete(id));
     }
 
 }

@@ -5,9 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.zzzimmer.maonamassa.dto.ModeloDTO;
+import org.zzzimmer.maonamassa.dto.ResponseModeloDTO;
+import org.zzzimmer.maonamassa.mapper.ModeloMapper;
 import org.zzzimmer.maonamassa.model.Marca;
 import org.zzzimmer.maonamassa.model.Modelo;
 import org.zzzimmer.maonamassa.repository.ModeloRepository;
+import org.zzzimmer.maonamassa.service.ModeloService;
 
 import java.util.List;
 
@@ -15,52 +19,55 @@ import java.util.List;
 @RequestMapping("/modelo")
 public class ModeloController {
 
+
     @Autowired
-    ModeloRepository modeloRepository;
+    private ModeloMapper modeloMapper;
+
+    @Autowired
+    private ModeloService modeloService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Modelo> create (@Valid @RequestBody Modelo modelo){
-        return ResponseEntity.ok().body(modeloRepository.save(modelo));
-        //a implementação de save() retorna a entidade, só conferir.
+    public ResponseEntity<ResponseModeloDTO> create (@Valid @RequestBody ModeloDTO modeloDTO){
+        return ResponseEntity.ok(modeloService.save(modeloDTO));
     }
 
     @GetMapping
-    public ResponseEntity<List<Modelo>> read(){
+    public ResponseEntity<List<ResponseModeloDTO>> read(){
         return ResponseEntity.ok().body(
-                modeloRepository.findAll());
+                modeloService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Modelo> readById(@PathVariable Long id){
+    public ResponseEntity<ResponseModeloDTO> readById(@PathVariable Long id){
 //        if (!modeloRepository.existsById(id)){
 //            return ResponseEntity.noContent().build();
 //        }else {
 //            return ResponseEntity.ok().body(modeloRepository.findById(id).orElseThrow());
 //        }
 //    }
-        return modeloRepository.findById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok()
+                .body(modeloService.findById(id));
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<Modelo> update(@PathVariable Long id, @Valid @RequestBody Modelo modelo){
-        if (!modeloRepository.existsById(id)){
+    public ResponseEntity<ResponseModeloDTO> update(@PathVariable Long id, @Valid @RequestBody ModeloDTO modeloDTO){
+        // precisa fazer isso? Visando tirar o acesso do controller de repository, criei esse metodo em service
+        if (!modeloService.existsById(id)){
             return ResponseEntity.notFound().build();
         } else {
-            modelo.setId(id);
-            Modelo modeloAtualizado = modeloRepository.save(modelo);
-            return ResponseEntity.ok().body(modeloAtualizado);
+            return ResponseEntity.ok().body(modeloService.update(id, modeloDTO));
         }
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
-        if (!modeloRepository.existsById(id)){
+        if (!modeloService.existsById(id)){
             return ResponseEntity.notFound().build();
         } else {
-            modeloRepository.deleteById(id);
+            modeloService.delete(id);
             return ResponseEntity.noContent().build();
         }
     }
