@@ -29,10 +29,11 @@ public class Motor {
     @Enumerated(EnumType.STRING)
     private ETipoDeCombustivel eTipoCombustivel;
 
-    @NotNull(message = "Informe o modelo")
-    @Getter //aqui, garante que sera implementado apenas o Getter de modelo.
-    // Visto a composição, não é adequado ter um seter de modelo
+//    @NotNull(message = "Informe o modelo")
+//    @Getter //aqui, garante que sera implementado apenas o Getter de modelo.
+//    // Visto a composição, não é adequado ter um seter de modelo
     @OneToOne
     @JoinColumn
+    @MapsId
     private Modelo modelo;
 }
